@@ -45,6 +45,7 @@ export class CurrencyListComponent implements OnInit, OnDestroy {
 
   choseFilterValue(value): void {
     this.filterValue = value;
+    this.currentPage = 1;
     this.getCurrencies();
   }
 
