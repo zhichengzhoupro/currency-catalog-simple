@@ -1,0 +1,38 @@
+
+<h1> Available currencies</h1>
+Total : {{total}}
+<div class="row">
+  <div class="col-4">
+    <input type="text" class="form-control" placeholder="search" #filterBox (keyup)="choseFilterValue(filterBox.value)">
+  </div>
+</div>
+<div class="row">
+  <div class="loader" *ngIf="isLoading"> </div>
+</div>
+<div class="row result-row" *ngIf="!isLoading">
+  <div class="col-12">
+    <ul class="list-inline">
+      <li  *ngFor="let currecy of currenciesList; index as ir"
+           class="list-inline-item  list-inline-item-currency"
+           routerLink="/currency/{{currecy.id}}"
+            >
+        ID: {{currecy.id}} Type: {{currecy.type}} Symbol: {{currecy.attributes.symbol}}
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-2">
+    <div ngbDropdown class="d-inline-block">
+      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{pageSize}}</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" >
+        <button class="dropdown-item" *ngFor="let pageSize of pageSizeValues" (click)="chosePageSize(pageSize)">
+          {{pageSize}}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+      <ngb-pagination [collectionSize]="total" [(page)]="currentPage" [maxSize]="maxSize" [pageSize]="pageSize" (pageChange)="changePage($event)" [boundaryLinks]="true" [directionLinks]="true"></ngb-pagination>
+  </div>
+</div>
