@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs/index';
 import {Currencies} from '../class/currencies';
 import {HttpClient} from '@angular/common/http';
 import {CurrencyDetail} from '../class/currency-detail';
+import {HttpParams} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +17,18 @@ export class CurrencyService {
   ) {}
 
   getCurrencies(pageSize: number, currenctPage: number, searchCondition: string): Observable<Currencies> {
-    const queryObject = new Object();
+
+    let queryObject = new HttpParams();
     if (pageSize) {
-      queryObject['page[size]'] = pageSize;
+      queryObject = queryObject.append('page[size]', pageSize.toString());
     }
     if (currenctPage) {
-      queryObject['page[number]'] = currenctPage.toString();
+      queryObject = queryObject.append('page[number]', currenctPage.toString());
     }
 
     if (searchCondition) {
-      queryObject['filter[search]'] = searchCondition;
+      queryObject = queryObject.append('filter[search]', searchCondition);
     }
-
     return this.http.get<Currencies>(this.url, {
       params: queryObject
     });
@@ -36,22 +37,5 @@ export class CurrencyService {
   getCurrency(id: string): Observable<CurrencyDetail> {
     const getCurrencyUrl = `${this.url}/${id}`;
     return this.http.get<CurrencyDetail>(getCurrencyUrl);
-  }
-
-  /** Log a HeroService message with the MessageService */
-  private log(message: string) {}
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
   }
 }
